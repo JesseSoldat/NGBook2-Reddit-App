@@ -1,21 +1,28 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Product } from '../Product';
 
 @Component({
   selector: 'product-list',
+  inputs: ['productList'],
  	outputs: ['onProductSelected'],
   template: `
-  <div *ngFor="let myProduct of productList">
-  	{{myProduct.name}}
-  	<button (click)="clicked(myProduct.name)">Click Me</button>
+  <div class="ui items">
+	  <product-row
+	  	*ngFor="let myProduct of productList"
+	  	[product]="myProduct"
+	  	(click)="clicked(myProduct)"
+	  	[class.selected]="isSelected(myProduct)">
+	  </product-row>
   </div>
   `
 })
 export class ProductListComponent implements OnInit {
-
-	@Input() productList: Product[];
-
+	// @input
+	productList: Product[];
+	// @output
 	onProductSelected: EventEmitter<Product>
+	// local state
+	private currentProduct: Product;
 
   constructor() { 
   	this.onProductSelected = new EventEmitter();
@@ -25,7 +32,16 @@ export class ProductListComponent implements OnInit {
   }
 
   clicked(product: Product){
+  	this.currentProduct = product;
+  	
   	this.onProductSelected.emit(product);
+  }
+
+  isSelected(product: Product): boolean {
+  	if(!product || !this.currentProduct){
+  		return false;
+  	}
+  	return product.sku === this.currentProduct.sku;
   }
 
 }

@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   inputs: ['price'],
   template:`
   <div class="price-display">
-  	{{price}}
+  	\${{price}}
   </div>
   `
 })
